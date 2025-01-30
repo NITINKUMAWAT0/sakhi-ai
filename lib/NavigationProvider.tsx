@@ -7,9 +7,11 @@ interface NavigationContextType {
     closeMobileNav: () => void;
 }
 
-const NavigationContext = createContext<NavigationContextType | undefined>(
-    undefined
-)
+ export const NavigationContext = createContext<NavigationContextType>({
+    isMobileNavOpen:false,
+    setIsMobileNavOpen:()=>{},
+    closeMobileNav:()=>{},
+ })
 
 export function NavigationProvider(
     {
@@ -19,7 +21,9 @@ export function NavigationProvider(
     }
 ) {
     const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+
     const closeMobileNav = () => setIsMobileNavOpen(false)
+    
     return <NavigationContext value={{isMobileNavOpen, setIsMobileNavOpen, closeMobileNav}}>
         {children}
     </NavigationContext>
