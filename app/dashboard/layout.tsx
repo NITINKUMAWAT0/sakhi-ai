@@ -16,7 +16,7 @@ export default function DashboardLayout({
                 {/* Sidebar */}
             </Authenticated>
 
-            <div>
+            <div className="flex-1">
                 <Header />
                 <main>{children}</main>
             </div>
