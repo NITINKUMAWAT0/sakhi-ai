@@ -5,6 +5,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Button } from './ui/button';
 import { ArrowRightIcon } from "@radix-ui/react-icons";
 import { ChatRequestBody } from '@/lib/types';
+import { createSSEParser } from '@/lib/SSEParser';
 
 interface ChatInterfaceProps {
     chatId: Id<"chats">;
@@ -71,6 +72,12 @@ function ChatInterface({ chatId, initialMessages }: ChatInterfaceProps) {
 
             if (!response.ok) throw new Error(await response.text());
             if (!response.body) throw new Error("No response body available");
+
+            //--- Handle the Stream ---
+            // Create SSE parser and stream reader
+
+            const parser = createSSEParser();
+            const reader = response.body.getReader();
 
 
         } catch (error) {
