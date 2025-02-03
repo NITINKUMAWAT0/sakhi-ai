@@ -1,6 +1,7 @@
 import {ChatAnthropic} from "@langchain/anthropic";
 import {ToolNode} from "@langchain/langgraph/prebuilt";
 import wxflows from "@wxflows/sdk/langchain"
+import {END, MessagesAnnotation, START, StateGraph} from "@langchain/langgraph";
 
 //Customers at: https://introspection.apis.stepzen.com/customers
 //Comments at : https://dummyjson.com/comments
@@ -56,3 +57,37 @@ const initializeModel = () => {
 
     return model;
 }
+
+
+const createWorkflow = () => {
+  const model = initializeModel();
+
+  return new StateGraph(MessagesAnnotation)
+    .addNode("agent", async (state) => {
+      // Create the system message content
+      const systemContent = SYSTEM_MESSAGE;
+
+      // Create the prompt template with system message and messages placeholder
+      const promptTemplate = ChatPromptTemplate.fromMessages([
+        new SystemMessage(systemContent, {
+          cache_control: { type: "ephemeral" },
+        }),
+        new MessagesPlaceholder("messages"),
+      ]);
+
+      // Trim the messages to manage conversation history
+      const trimmedMessages = await trimmer.invoke(state.messages);
+
+      // Format the prompt with the current messages
+      const prompt = await promptTemplate.invoke({ messages: trimmedMessages });
+
+      // Get response from the model
+      const response = await model.invoke(prompt);
+
+      return { messages: [response] };
+    })
+    .addNode("tools", toolNode)
+    .addEdge(START, "agent")
+    .addConditionalEdges("agent", shouldContinue)
+    .addEdge("tools", "agent");
+};
