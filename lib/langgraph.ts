@@ -140,7 +140,7 @@ function addCachingHeaders(messages: BaseMessage[]): BaseMessage[] {
   };
 
   // Cache the last message
-  // console.log("🤑🤑🤑 Caching last message");
+  console.log("🤑🤑🤑 Caching last message");
   addCache(cachedMessages.at(-1)!);
 
   // Find and cache the second-to-last human message
