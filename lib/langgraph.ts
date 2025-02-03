@@ -149,7 +149,7 @@ function addCachingHeaders(messages: BaseMessage[]): BaseMessage[] {
     if (cachedMessages[i] instanceof HumanMessage) {
       humanCount++;
       if (humanCount === 2) {
-        // console.log("🤑🤑🤑 Caching second-to-last human message");
+        console.log("🤑🤑🤑 Caching second-to-last human message");
         addCache(cachedMessages[i]);
         break;
       }
@@ -162,7 +162,7 @@ function addCachingHeaders(messages: BaseMessage[]): BaseMessage[] {
 export async function submitQuestion(messages: BaseMessage[], chatId: string) {
   // Add caching headers to messages
   const cachedMessages = addCachingHeaders(messages);
-  // console.log("🔒🔒🔒 Messages:", cachedMessages);
+  console.log("🔒🔒🔒 Messages:", cachedMessages);
 
   // Create workflow with chatId and onToken callback
   const workflow = createWorkflow();
