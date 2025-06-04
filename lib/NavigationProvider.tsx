@@ -24,7 +24,9 @@ export function NavigationProvider(
 
     const closeMobileNav = () => setIsMobileNavOpen(false)
     
-    return <NavigationContext value={{isMobileNavOpen, setIsMobileNavOpen, closeMobileNav}}>
-        {children}
-    </NavigationContext>
+    return (
+        <NavigationContext.Provider value={{ isMobileNavOpen, setIsMobileNavOpen, closeMobileNav }}>
+            {children}
+        </NavigationContext.Provider>
+    );
 }
