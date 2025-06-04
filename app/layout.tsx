@@ -25,13 +25,14 @@ export default function RootLayout({
 }>) {
   return (
     <ConvexClientProvider>
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
-    </html>
+      <html lang="en">
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+          suppressHydrationWarning={true}
+        >
+          {children}
+        </body>
+      </html>
     </ConvexClientProvider>
   );
 }

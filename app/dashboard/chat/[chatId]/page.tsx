@@ -16,15 +16,18 @@ interface PageParams {
 export default async function ChatPage({
     params,
 }: {
-    params: PageParams;
+    params: Promise<PageParams>; // Changed to Promise<PageParams>
 }) {
-    const chatId = params.chatId as Id<"chats">;
+    // Await params before using its properties
+    const resolvedParams = await params;
+    const chatId = resolvedParams.chatId as Id<"chats">;
 
     const { userId } = await auth();
 
     if (!userId) {
         redirect("/");
     }
+    
     try {
         const convex = getConvexClient();
 
