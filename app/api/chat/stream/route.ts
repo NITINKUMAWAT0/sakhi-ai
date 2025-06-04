@@ -44,9 +44,12 @@ export async function POST(req: Request) {
     const response = new Response(stream.readable, {
       headers: {
         "Content-Type": "text/event-stream",
-        // "Cache-Control": "no-cache, no-transform",
+        "Cache-Control": "no-cache, no-transform",
         Connection: "keep-alive",
         "X-Accel-Buffering": "no", // Disable buffering for nginx which is required for SSE to work properly
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
       },
     });
 
@@ -144,4 +147,24 @@ export async function POST(req: Request) {
       { status: 500 }
     );
   }
+}
+
+// Handle OPTIONS requests for CORS
+export async function OPTIONS() {
+  return new Response(null, {
+    status: 200,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type, Authorization",
+    },
+  });
+}
+
+// Handle other methods explicitly
+export async function GET() {
+  return NextResponse.json(
+    { error: "Method not allowed" },
+    { status: 405 }
+  );
 }
