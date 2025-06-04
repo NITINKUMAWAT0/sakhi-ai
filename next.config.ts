@@ -1,7 +1,16 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  /* config options here */
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  experimental: {
+    serverComponentsExternalPackages: ['@langchain/core'],
+  },
+  webpack: (config: { externals: { '@langchain/core': string; }[]; }, { isServer }: { isServer: boolean }) => {
+    if (isServer) {
+      config.externals.push({
+        '@langchain/core': 'commonjs @langchain/core',
+      });
+    }
+    return config;
+  },
 };
 
-export default nextConfig;
+module.exports = nextConfig;
